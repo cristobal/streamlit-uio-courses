@@ -16,6 +16,7 @@ import streamlit as st
 # Updates this script every 3 minutes
 UPDATE_INTERVAL = 3 * 60  # seconds
 URL = "https://www.uio.no/studier/emner/ledige-plasser/"
+TIMEOUT = 10  # seconds
 
 
 def get_courses(soup: BeautifulSoup) -> list[Tag]:
@@ -50,7 +51,7 @@ st.title(
 )
 # st.caption("Henter data fra UiO...")
 
-response = requests.get(URL, timeout=10)
+response = requests.get(URL, timeout=TIMEOUT)
 if response.status_code != 200:
     st.write(
         f"Kunne ikke hente data (url: {URL}) (status code: {response.status_code})"
