@@ -1,3 +1,7 @@
+# directories
 scratch
-.DS_Store
+.venv
 .vscode
+
+# files
+.DS_Store
