@@ -1,3 +1,7 @@
 # directories
+scratch
 .venv
 .vscode
+
+# files
+.DS_Store
