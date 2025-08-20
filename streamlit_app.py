@@ -45,6 +45,25 @@ def last_updated(soup: BeautifulSoup) -> str:
     return element.text
 
 
+def makeHref(course_text: str) -> str:
+    course_code = course_text.split(" - ")[0]  # Extract course code (e.g., "IN1000")
+
+    # Get the course prefix (e.g., "IN", "MAT", "STK", "STK-MAT")
+    course_prefix = re.match(r"([A-Z-]+)", course_code)
+    if course_prefix is None:
+        return "#"
+
+    match course_prefix.group(1):
+        case "MAT" | "STK-MAT":
+            topic = "math"
+        case "STK":
+            topic = "STK"
+        case _:
+            topic = "ifi"  # default fallback
+
+    return f"https://www.uio.no/studier/emner/matnat/{topic}/{course_code}/index.html"
+
+
 st.set_page_config(page_title="Ledige Emner UiO", page_icon="📚", layout="centered")
 st.title(
     f"Ledige Emner for Informatikk, Matematikk og Statistikk kurs ved UiO {datetime.datetime.now().year}"
@@ -62,7 +81,12 @@ else:
         f"Sist oppdatert: {last_updated(soup)}, oppdaterings interval hvert: {int(UPDATE_INTERVAL / 60)} minutt."
     )
     st.divider()
-    st.markdown(str.join("\n", [f"* {course.text}" for course in get_courses(soup)]))
+
+    courses = get_courses(soup)
+    for course in courses:
+        st.markdown(
+            f"* [{course.text}]({makeHref(course.text)})", unsafe_allow_html=True
+        )
 
 sleep(UPDATE_INTERVAL)
 st.rerun()
