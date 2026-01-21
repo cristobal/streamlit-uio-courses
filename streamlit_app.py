@@ -56,11 +56,10 @@ def makeHref(course_text: str) -> str:
     match course_prefix.group(1):
         case "MAT" | "STK-MAT":
             topic = "math"
-        case "STK":
-            topic = "STK"
+        case "STK" | "STK-IN":
+            topic = "math"
         case _:
             topic = "ifi"  # default fallback
-
     return f"https://www.uio.no/studier/emner/matnat/{topic}/{course_code}/index.html"
 
 
